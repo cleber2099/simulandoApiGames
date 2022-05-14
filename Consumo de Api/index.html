@@ -5,9 +5,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+  
 </head>
 <body>
+    <h4>lista de games</h4>
+    <ul id="games"></ul>
+    <hr>
+    <h4>novo game</h4>
+
+        <input type="text" name="name" id="name" placeholder="nome">
+        <input type="number" name="year" id="year" placeholder="ano">
+        <input type="number" placeholder="preco" name="price" id="price">
+        <button onclick="createGame()">Criar</button>
     
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function createGame(){
+        var titleInput = document.getElementById('name');
+        var yearInput = document.getElementById('year');
+        var priceInput = document.getElementById('price');
+
+        var game = {
+            name: titleInput.value,
+            year: yearInput.value,
+            price: priceInput.value
+        }
+        axios.post('http://localhost:3000/game',game).then(response =>{
+            if(response.status == 200){
+                alert('game criado com sucesso');
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+    }
+
+
+
+    axios.get("http://localhost:3000/games").then(response => {
+        var games = response.data;
+        console.log(games);
+        var lista = document.getElementById("games");
+
+        games.forEach(game => {
+
+            var li = document.createElement("li");
+            item.setAttribute("data-id", game.id);
+            item.setAttribute("data-name", game.name);
+            item.setAttribute("data-year", game.year);
+            item.setAttribute("data-price", game.price);
+            
+            li.innerHTML =game.id + " - "+  game.name + " - " + game.price;
+            lista.appendChild(li);
+        });
+    }).catch(error => {
+        console.log(error);
+    });
+</script>
 </html>
